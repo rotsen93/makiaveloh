@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+@theme {
+  --color-void: #0B0B0C;
+  --color-void-light: #111113;
+  --color-accent: #5BC266;
+  --color-accent-dim: #5BC26633;
+  --color-secondary: #4D8AF0;
+  --color-secondary-dim: #4D8AF033;
+  --color-brand-red: #FF5F5F;
+  --color-surface: #1E3A4C;
+  --color-surface-light: #284B63;
+  --color-surface-elevated: #355C7D;
+  --color-text-primary: #FDFBF7;
+  --color-text-secondary: #D1D9E6;
+  --color-text-muted: #94A3B8;
+  --font-mono: "SF Mono", "Fira Code", "Fira Mono", "Roboto Mono", monospace;
+  --font-display: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  background-color: #000000;
+  color-scheme: dark;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-display);
+  background-color: var(--color-void);
+  color: var(--color-text-primary);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: #000000;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-surface-light);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-surface-elevated);
+}
+
+::selection {
+  background-color: var(--color-accent-dim);
+  color: var(--color-accent);
+}
+
+@keyframes scan-line {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+.animate-scan {
+  animation: scan-line 8s linear infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+.animate-pulse-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(91, 194, 102, 0.05); }
+  50% { box-shadow: 0 0 40px rgba(91, 194, 102, 0.15); }
+}
+.animate-glow {
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+
+.bento-cell {
+  backdrop-filter: blur(12px);
+  background-color: rgba(30, 58, 76, 0.35);
+  border: 1px solid rgba(40, 75, 99, 0.5);
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+.bento-cell:hover {
+  border-color: rgba(91, 194, 102, 0.3);
+  background-color: rgba(30, 58, 76, 0.5);
+}
+
+.bento-cell-active {
+  border-color: var(--color-accent) !important;
+  box-shadow: 0 0 20px rgba(91, 194, 102, 0.08);
+}
