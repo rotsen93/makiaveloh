@@ -1,60 +1,18 @@
 import { useParams, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Calendar, Clock } from 'lucide-react'
-import { postBySlug } from '../../lib/blog'
-
-function RenderContent({ content }: { content: string }) {
-  const lines = content.trim().split('\n')
-
-  return (
-    <div className="space-y-4">
-      {lines.map((line, i) => {
-        const trimmed = line.trim()
-        if (!trimmed) return <br key={i} />
-
-        if (trimmed.startsWith('## ')) {
-          return (
-            <h2 key={i} className="text-lg font-mono tracking-wide text-text-primary pt-4">
-              {trimmed.replace('## ', '')}
-            </h2>
-          )
-        }
-
-        if (trimmed.startsWith('- ')) {
-          return (
-            <li key={i} className="text-sm text-text-secondary ml-4 list-disc">
-              {trimmed.replace('- ', '')}
-            </li>
-          )
-        }
-
-        if (trimmed.startsWith('**') && trimmed.endsWith('**')) {
-          return (
-            <p key={i} className="text-sm font-bold text-text-primary">
-              {trimmed.replace(/\*\*/g, '')}
-            </p>
-          )
-        }
-
-        return (
-          <p key={i} className="text-sm text-text-secondary leading-relaxed">
-            {trimmed}
-          </p>
-        )
-      })}
-    </div>
-  )
-}
+import { ArrowLeft, Calendar } from 'lucide-react'
+import ReactMarkdown from 'react-markdown'
+import { getPostBySlug } from '../../lib/content'
 
 export function BlogPostPage() {
   const { slug } = useParams<{ slug: string }>()
-  const post = slug ? postBySlug(slug) : undefined
+  const post = slug ? getPostBySlug(slug) : undefined
 
   if (!post) {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 md:pt-24 pb-8">
         <div className="bento-cell rounded-xl p-12 text-center">
-          <p className="text-4xl font-mono text-text-muted mb-4">404</p>
+          <p className="text-4xl font-mono text-text-muted mb-4 font-bold">404</p>
           <p className="text-sm text-text-muted font-mono mb-6">Post not found</p>
           <Link
             to="/blog"
@@ -82,9 +40,9 @@ export function BlogPostPage() {
         <ArrowLeft className="w-3.5 h-3.5" /> Back to Blog
       </Link>
 
-      <div className="bento-cell rounded-xl p-6 md:p-10">
+      <article className="bento-cell rounded-xl p-6 md:p-10">
         <div className="flex flex-wrap gap-2 mb-4">
-          {post.tags.map((tag) => (
+          {(post.tags ?? []).map((tag) => (
             <span
               key={tag}
               className="text-[8px] tracking-wider uppercase font-mono px-2 py-0.5 rounded bg-surface/40 text-text-muted"
@@ -101,16 +59,14 @@ export function BlogPostPage() {
         <div className="flex items-center gap-4 mb-8 pb-6 border-b border-surface/40">
           <div className="flex items-center gap-1.5">
             <Calendar className="w-3.5 h-3.5 text-text-muted" />
-            <span className="text-[10px] font-mono text-text-muted">{post.published}</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <Clock className="w-3.5 h-3.5 text-text-muted" />
-            <span className="text-[10px] font-mono text-text-muted">{post.readTime} min read</span>
+            <span className="text-[10px] font-mono text-text-muted">{post.date}</span>
           </div>
         </div>
 
-        <RenderContent content={post.content} />
-      </div>
+        <div className="prose prose-invert prose-sm max-w-none text-text-secondary leading-relaxed">
+          <ReactMarkdown>{post.body}</ReactMarkdown>
+        </div>
+      </article>
     </motion.div>
   )
 }
