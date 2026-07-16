@@ -1,6 +1,9 @@
-import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
+import { motion, useInView } from 'framer-motion'
 import { Terminal } from 'lucide-react'
+import config from '../lib/config'
+
+const TAGLINE_PARTS = config.sections.map((s) => s.heading).join(' \u00b7 ')
 
 export function HeroModule() {
   const ref = useRef(null)
@@ -18,11 +21,11 @@ export function HeroModule() {
         <div className="flex items-center gap-2 mb-3">
           <Terminal className="w-4 h-4 text-accent" />
           <span className="text-[8px] tracking-[0.35em] uppercase text-text-muted font-mono">
-            Strategic Hub
+            Digital Space
           </span>
         </div>
         <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-[0.2em] uppercase leading-tight">
-          MAKIAVELOH
+          {config.name}
         </h1>
       </div>
 
@@ -37,14 +40,14 @@ export function HeroModule() {
           </span>
         </div>
 
-        <p className="text-text-muted text-[10px] md:text-xs font-mono tracking-wide leading-relaxed">
-          Constructor de sistemas digitales. Mente creativa. Código, música y filosofía.
+        <p className="text-text-secondary text-[10px] md:text-xs font-mono tracking-wide leading-relaxed">
+          {TAGLINE_PARTS}
         </p>
       </div>
 
       <div className="mt-4 pt-4 border-t border-surface/60">
         <p className="text-text-muted text-[10px] tracking-[0.25em] uppercase font-mono">
-          v3.0.0 // {new Date().getFullYear()} // All Systems Operational
+          v{config.version} // {new Date().getFullYear()} // All Systems Operational
         </p>
       </div>
     </motion.div>
