@@ -1,7 +1,8 @@
-import { useRef } from 'react'
+import { useRef, useMemo } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { Hash } from 'lucide-react'
+import { getProjects, getPosts } from '../lib/content'
 
 interface PillarSectionProps {
   id: string
@@ -11,9 +12,28 @@ interface PillarSectionProps {
   ctaText: string
 }
 
+const COUNT_LABELS: Record<string, (n: number) => string> = {
+  code: (n) => `${n} ${n === 1 ? 'proyecto' : 'proyectos'}`,
+  music: (n) => `${n} ${n === 1 ? 'proyecto' : 'proyectos'}`,
+  philosophy: (n) => `${n} ${n === 1 ? 'artículo' : 'artículos'}`,
+  tools: (n) => `${n} ${n === 1 ? 'proyecto' : 'proyectos'}`,
+}
+
 export function PillarSection({ id, heading, description, ctaLink, ctaText }: PillarSectionProps) {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
+
+  const count = useMemo(() => {
+    if (ctaLink === '/projects' || ctaLink === '/playground') {
+      return getProjects().length
+    }
+    if (ctaLink === '/blog') {
+      return getPosts().length
+    }
+    return null
+  }, [ctaLink])
+
+  const label = count !== null ? (COUNT_LABELS[id] ?? ((n: number) => `${n}`))(count) : null
 
   return (
     <section id={id} className="scroll-mt-20">
@@ -38,6 +58,12 @@ export function PillarSection({ id, heading, description, ctaLink, ctaText }: Pi
         <p className="text-sm text-text-muted font-mono leading-relaxed max-w-2xl">
           {description}
         </p>
+
+        {label && (
+          <p className="mt-3 text-[10px] tracking-[0.15em] uppercase text-accent/70 font-mono">
+            {label}
+          </p>
+        )}
 
         {ctaLink && ctaText && (
           <div className="mt-5 pt-4 border-t border-surface/40">

@@ -39,7 +39,7 @@ function warnMissing(file: string, field: string, fallback: string): string {
 
 // --- Posts ---
 
-const postsGlob = import.meta.glob<string>('../content/posts/*.md', {
+const postsGlob = import.meta.glob<string>('../../content/posts/*.md', {
   eager: true,
   query: '?raw',
   import: 'default',
@@ -84,7 +84,7 @@ export function getPostBySlug(slug: string): Post | undefined {
 
 // --- Projects ---
 
-const projectsGlob = import.meta.glob<string>('../content/projects/*.md', {
+const projectsGlob = import.meta.glob<string>('../../content/projects/*.md', {
   eager: true,
   query: '?raw',
   import: 'default',
