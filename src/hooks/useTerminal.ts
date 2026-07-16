@@ -1,4 +1,6 @@
 import { useState, useCallback, useRef } from 'react'
+import config from '../lib/config'
+import { getProjects, getPosts } from '../lib/content'
 
 interface TerminalLine {
   id: number
@@ -6,87 +8,98 @@ interface TerminalLine {
   text: string
 }
 
-const COMMANDS: Record<string, () => string[]> = {
-  help: () => [
-    'Available commands:',
-    '  projects  — List active systems',
-    '  status    — System status report',
-    '  contact   — Contact information',
-    '  skills    — Technical capabilities',
-    '  about     — About MAKIAVELOH',
-    '  whoami    — Current user identity',
-    '  uptime    — System uptime',
-    '  banner    — Display splash screen',
-    '  date      — Current date and time',
-    '  clear     — Clear terminal',
-    '  help      — Show this message',
-  ],
-  projects: () => [
-    'SYS_01 // FIAOCONTROL .............. [ACTIVE]',
-    'SYS_02 // NEST ..................... [ACTIVE]',
-    '',
-    'Use "project <name>" for details.',
-  ],
-  status: () => [
-    'System Status Report',
-    '────────────────────────────',
-    'Uptime:       99.97%',
-    'Projects:     2 registered',
-    'Active:       2',
-    'Environment:  Production',
-    'Last Deploy:  ' + new Date().toISOString().split('T')[0],
-    'Kernel:       MAKIAVELOH v3.0.0',
-  ],
-  contact: () => [
-    '────────────────────────────',
-    '  Email:    hello@makiaveloh.com',
-    '  Web:      makiaveloh.com',
-    '  GitHub:   github.com/makiaveloh',
-    '────────────────────────────',
-  ],
-  skills: () => [
-    'Frontend:  React, Next.js, React Native, Tailwind',
-    'Backend:   Node.js, Python, PostgreSQL, Supabase',
-    'Mobile:    Kotlin, Jetpack Compose, Capacitor',
-    'Tools:     Docker, Git, Firebase, Linux, Figma',
-  ],
-  about: () => [
-    'MAKIAVELOH — Strategic Hub',
-    '',
-    'Constructor de sistemas digitales.',
-    'Full-stack developer, UI engineer, creative mind.',
-    'Código, música y filosofía como pilares.',
-    '',
-    'Frase actual: "Crear herramientas que importan."',
-  ],
-  whoami: () => [
-    'makiaveloh',
-    'Role:        System Architect & Creative Developer',
-    'Status:      Online',
-    'Session:     Active',
-  ],
-  uptime: () => [
-    `System uptime: ${Math.floor(Math.random() * 365)} days, ${Math.floor(Math.random() * 24)} hours, ${Math.floor(Math.random() * 60)} minutes`,
-    'Load average: 0.42, 0.31, 0.28',
-  ],
-  banner: () => [
-    '╔══════════════════════════════════╗',
-    '║        MAKIAVELOH v3.0.0         ║',
-    '║       Strategic Hub System       ║',
-    '║   All Systems Fully Operational  ║',
-    '╚══════════════════════════════════╝',
-  ],
-  date: () => [
-    new Date().toLocaleString('es-DO', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      timeZone: 'America/Santo_Domingo',
-    }),
-  ],
+function buildCommands(): Record<string, () => string[]> {
+  return {
+    help: () => [
+      'Available commands:',
+      '  projects  — List registered systems',
+      '  blog      — Recent posts',
+      '  status    — System status report',
+      '  contact   — Contact information',
+      '  skills    — Technical capabilities',
+      '  about     — About this system',
+      '  whoami    — Current user identity',
+      '  uptime    — System uptime',
+      '  banner    — Display splash screen',
+      '  date      — Current date and time',
+      '  clear     — Clear terminal',
+      '  help      — Show this message',
+    ],
+    projects: () => {
+      const projects = getProjects()
+      if (projects.length === 0) return ['No projects registered yet.']
+      return projects.map(
+        (p) =>
+          `SYS_${String(projects.indexOf(p) + 1).padStart(2, '0')} // ${p.title.padEnd(24, ' ')} [${p.status.toUpperCase()}]`,
+      )
+    },
+    blog: () => {
+      const posts = getPosts()
+      if (posts.length === 0) return ['No posts published yet.']
+      return posts.slice(0, 5).map((p) => `${p.date}  ${p.title}`)
+    },
+    status: () => [
+      'System Status Report',
+      '\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500',
+      `Kernel:       ${config.name} v${config.version}`,
+      `Projects:     ${getProjects().length} registered`,
+      `Posts:        ${getPosts().length} published`,
+      `Environment:  Production`,
+    ],
+    contact: () => {
+      const lines: string[] = [
+        '\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500',
+      ]
+      if (config.socials.email) lines.push(`  Email:    ${config.socials.email}`)
+      if (config.socials.github) lines.push(`  GitHub:   ${config.socials.github}`)
+      if (config.socials.instagram) lines.push(`  Instagram: ${config.socials.instagram}`)
+      lines.push('\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500')
+      return lines
+    },
+    skills: () => [
+      'Frontend:  React, Next.js, React Native, Tailwind',
+      'Backend:   Node.js, Python, PostgreSQL, Supabase',
+      'Mobile:    Kotlin, Jetpack Compose, Capacitor',
+      'Tools:     Docker, Git, Firebase, Linux, Figma',
+    ],
+    about: () => [
+      `${config.name} \u2014 Strategic Hub`,
+      '',
+      'Constructor de sistemas digitales.',
+      'Full-stack developer, UI engineer, creative mind.',
+      'C\u00f3digo, m\u00fasica y filosof\u00eda como pilares.',
+      '',
+      'Frase actual: "Crear herramientas que importan."',
+    ],
+    whoami: () => [
+      'makiaveloh',
+      'Role:        System Architect & Creative Developer',
+      'Status:      Online',
+      'Session:     Active',
+    ],
+    uptime: () => [
+      `System uptime: ${Math.floor(Math.random() * 365)} days, ${Math.floor(Math.random() * 24)} hours, ${Math.floor(Math.random() * 60)} minutes`,
+      'Load average: 0.42, 0.31, 0.28',
+    ],
+    banner: () => [
+      '\u2554\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2557',
+      `\u2551        ${config.name} v${config.version}         \u2551`,
+      '\u2551       Strategic Hub System       \u2551',
+      '\u2551   All Systems Fully Operational  \u2551',
+      '\u255a\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255d',
+    ],
+    date: () => [
+      new Date().toLocaleString('es-DO', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZone: 'America/Santo_Domingo',
+      }),
+    ],
+  }
 }
 
 const ALIASES: Record<string, string> = {
@@ -101,9 +114,9 @@ const ALIASES: Record<string, string> = {
 
 export function useTerminal(maxLines = 50) {
   const [lines, setLines] = useState<TerminalLine[]>([
-    { id: 0, type: 'output', text: '╔══════════════════════════════════╗' },
-    { id: 1, type: 'output', text: '║     MAKIAVELOH Terminal v3.0.0     ║' },
-    { id: 2, type: 'output', text: '╚══════════════════════════════════╝' },
+    { id: 0, type: 'output', text: '\u2554\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2557' },
+    { id: 1, type: 'output', text: `\u2551     ${config.name} Terminal v${config.version}     \u2551` },
+    { id: 2, type: 'output', text: '\u255a\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255d' },
     { id: 3, type: 'output', text: 'Type "help" for available commands.' },
   ])
   const [history, setHistory] = useState<string[]>([])
@@ -124,11 +137,13 @@ export function useTerminal(maxLines = 50) {
       const cmd = trimmed.toLowerCase()
       const resolved = ALIASES[cmd] ?? cmd
 
+      const COMMANDS = buildCommands()
+
       if (resolved === 'clear') {
         return [
-          { id: nextId + 1, type: 'output', text: '╔══════════════════════════════════╗' },
-          { id: nextId + 2, type: 'output', text: '║     MAKIAVELOH Terminal v3.0.0     ║' },
-          { id: nextId + 3, type: 'output', text: '╚══════════════════════════════════╝' },
+          { id: nextId + 1, type: 'output', text: '\u2554\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2557' },
+          { id: nextId + 2, type: 'output', text: `\u2551     ${config.name} Terminal v${config.version}     \u2551` },
+          { id: nextId + 3, type: 'output', text: '\u255a\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255d' },
           { id: nextId + 4, type: 'output', text: 'Type "help" for available commands.' },
         ]
       }
@@ -144,7 +159,7 @@ export function useTerminal(maxLines = 50) {
         newLines.push({
           id: nextId + 1,
           type: 'output',
-          text: `zsh: command not found: ${trimmed}. Type "help" for available commands.`,
+          text: `Command not found: ${trimmed}. Type "help" for available commands.`,
         })
         counterRef.current = nextId + 2
       }
