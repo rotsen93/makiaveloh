@@ -35,14 +35,15 @@ export function TerminalGateway() {
   }
 
   return (
-    <AnimatePresence onExitComplete={() => navigate('/home')}>
-      {!exiting && (
-        <motion.div
-          className="fixed inset-0 z-50 bg-void flex flex-col font-mono"
-          initial={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.96, filter: 'blur(4px)' }}
-          transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-        >
+    <div className="fixed inset-0 z-50 bg-void font-mono">
+      <AnimatePresence onExitComplete={() => navigate('/home')}>
+        {!exiting && (
+          <motion.div
+            className="h-full w-full flex flex-col"
+            initial={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+            exit={{ opacity: 0, scale: 0.96, filter: 'blur(4px)' }}
+            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+          >
           <div className="flex items-center justify-between px-5 py-3 border-b border-border/20 select-none">
             <div className="flex items-center gap-2">
               <span className="w-3 h-3 rounded-full bg-error" />
@@ -96,7 +97,8 @@ export function TerminalGateway() {
             <div ref={bottomRef} />
           </div>
         </motion.div>
-      )}
-    </AnimatePresence>
+        )}
+      </AnimatePresence>
+    </div>
   )
 }
