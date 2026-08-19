@@ -1,46 +1,97 @@
-import { Routes, Route, useLocation } from 'react-router-dom'
-import { Navbar } from './components/layout/Navbar'
-import { Footer } from './components/layout/Footer'
-import { TerminalGateway } from './pages/TerminalGateway'
-import { HomePage } from './pages/HomePage'
-import { ProjectsPage } from './pages/ProjectsPage'
-import { PlaygroundPage } from './pages/PlaygroundPage'
-import { BlogListPage } from './pages/blog/BlogListPage'
-import { BlogPostPage } from './pages/blog/BlogPostPage'
-import { NotFoundPage } from './pages/NotFoundPage'
-import { AnimatePresence, motion } from 'framer-motion'
+import { lazy, Suspense } from 'react'
+import { Routes, Route } from 'react-router-dom'
+import { DarkModeProvider, useDarkMode } from './contexts/DarkModeContext'
+import { useThemeColors } from './hooks/useThemeColors'
+import Navigation from './components/section/Navigation'
+import About from './components/section/About'
+import DotGrid from './components/ui/DotGrid'
+import SectionDivider from './components/ui/SectionDivider'
+import './App.css'
 
-export default function App() {
-  const location = useLocation()
-  const isTerminal = location.pathname === '/'
+// Lazy load project pages - add your project page imports here
+// Example: const MyProject = lazy(() => import('./pages/projects/MyProject'))
+const FiaoControl = lazy(() => import('./pages/projects/FiaoControl'))
+const Nest = lazy(() => import('./pages/projects/Nest'))
+const Musify = lazy(() => import('./pages/projects/Musify'))
+const Contact = lazy(() => import('./pages/Contact'))
+
+// Lazy load below-the-fold components for better initial load
+const Projects = lazy(() => import('./components/section/Projects'))
+const Experience = lazy(() => import('./components/section/Experience'))
+const Skills = lazy(() => import('./components/section/Skills'))
+const Certifications = lazy(() => import('./components/section/Certifications'))
+const Footer = lazy(() => import('./components/Footer'))
+
+function HomePage() {
 
   return (
-    <div className="min-h-screen bg-void">
-      {!isTerminal && <Navbar />}
-
-      <main>
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={location.pathname}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <Routes location={location}>
-              <Route path="/" element={<TerminalGateway />} />
-              <Route path="/home" element={<HomePage />} />
-              <Route path="/projects" element={<ProjectsPage />} />
-              <Route path="/playground" element={<PlaygroundPage />} />
-              <Route path="/blog" element={<BlogListPage />} />
-              <Route path="/blog/:slug" element={<BlogPostPage />} />
-              <Route path="*" element={<NotFoundPage />} />
-            </Routes>
-          </motion.div>
-        </AnimatePresence>
-      </main>
-
-      {!isTerminal && <Footer />}
-    </div>
+    <>
+      <About />
+      <Suspense fallback={<div className="h-screen flex items-center justify-center">Loading...</div>}>
+        <Projects />
+      </Suspense>
+      <Suspense fallback={<div className="h-64 flex items-center justify-center">Loading...</div>}>
+        <Experience />
+      </Suspense>
+      {/* Technical Section Divider */}
+      <SectionDivider label="SYS_MODULE // 04" moduleName="SKILLS & INFRASTRUCTURE" />
+      <Suspense fallback={<div className="h-screen flex items-center justify-center">Loading...</div>}>
+        <Skills />
+      </Suspense>
+      <Suspense fallback={<div className="h-64 flex items-center justify-center">Loading...</div>}>
+        <Certifications />
+      </Suspense>
+    </>
   )
 }
+
+function AppContent() {
+  const { isDarkMode } = useDarkMode();
+  const themeColors = useThemeColors();
+
+  return (
+    <>
+      <Navigation />
+      <div className="app transition-colors duration-300" style={{ backgroundColor: isDarkMode ? 'transparent' : undefined }}>
+        {/* Dot grid background */}
+        <div className="fixed inset-0 -z-10" aria-hidden="true">
+          <DotGrid
+            dotSize={2.5}
+            gap={30}
+            baseColor={themeColors.colors.pink[700]}
+            activeColor={themeColors.colors.pink[300]}
+            proximity={110}
+            speedTrigger={80}
+            shockRadius={220}
+            shockStrength={4}
+          />
+        </div>
+        <a href="#main-content" className="skip-link">Skip to main content</a>
+        <main id="main-content" className="main-content">
+          <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/projects/fiaocontrol" element={<FiaoControl />} />
+              <Route path="/projects/nest" element={<Nest />} />
+              <Route path="/projects/musify" element={<Musify />} />
+            </Routes>
+          </Suspense>
+        </main>
+        <Suspense fallback={<div className="h-32 flex items-center justify-center">Loading...</div>}>
+          <Footer />
+        </Suspense>
+      </div>
+    </>
+  )
+}
+
+function App() {
+  return (
+    <DarkModeProvider>
+      <AppContent />
+    </DarkModeProvider>
+  )
+}
+
+export default App

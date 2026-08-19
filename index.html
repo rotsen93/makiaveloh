@@ -2,14 +2,85 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="MAKIAVELOH — Strategic Hub. Constructor de sistemas digitales. Full-stack developer, UI engineer, creative mind." />
-    <meta name="keywords" content="makiaveloh, portfolio, developer, react, typescript, full-stack" />
-    <meta property="og:title" content="MAKIAVELOH // STRATEGIC HUB" />
-    <meta property="og:description" content="Constructor de sistemas digitales. Full-stack developer, UI engineer, creative mind." />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <!-- DNS prefetch and preconnect for faster resource loading -->
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="canonical" href="https://makiaveloh.com" />
+    <meta name="description" content="Nestor (Makiaveloh) — Full-Stack Developer & IT Systems Builder. 15+ years in systems, security, and AI-assisted web architectures." />
     <meta property="og:type" content="website" />
-    <title>MAKIAVELOH // STRATEGIC HUB</title>
+    <meta property="og:url" content="https://makiaveloh.com/" />
+    <meta property="og:title" content="Makiaveloh — Full-Stack Developer & Systems Builder" />
+    <meta property="og:description" content="Portfolio and interactive technical workspace of Nestor (Makiaveloh)." />
+    <meta property="og:image" content="/favicon.png" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Makiaveloh — Full-Stack Developer" />
+    <meta name="twitter:description" content="Portfolio and interactive technical workspace of Nestor (Makiaveloh)." />
+    <title>Makiaveloh — Full-Stack Developer & Systems Builder</title>
+    <script>
+      try {
+        if (localStorage.getItem('darkMode') !== 'false') {
+          document.documentElement.classList.add('dark');
+        }
+      } catch (e) {}
+      window.addEventListener('vite:preloadError', () => {
+        window.location.reload();
+      });
+    </script>
+    <style>
+      /* Critical CSS for initial render - Above the fold styles */
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html { background: #0A0F1B; }
+      html:not(.dark) { background: #FDF8FA; }
+      body { 
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+        background: transparent;
+        color: #FFFFFF;
+        line-height: 1.6;
+      }
+      /* Navigation critical styles */
+      .navigation {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        background: rgba(10, 15, 27, 0.4);
+        backdrop-filter: blur(20px);
+        padding: 1rem 0;
+      }
+      .main-content { padding-top: 80px; }
+      /* About section critical styles */
+      .about-section {
+        min-height: 100vh;
+        background: linear-gradient(180deg, rgb(10 15 27) 0%, rgb(15 23 42) 100%);
+        padding: 2rem 0;
+      }
+      .container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+      .text-center { text-align: center; }
+      /* Loading states for lazy components */
+      .loading-fallback {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f8f9fa;
+        color: #6c757d;
+      }
+      /* Performance optimizations */
+      .will-change-transform { will-change: transform; }
+      .will-change-opacity { will-change: opacity; }
+      .gpu-accelerated { transform: translateZ(0); }
+      /* Optimize repaints and reflows */
+      img, picture {
+        content-visibility: auto;
+        contain-intrinsic-size: 0 200px;
+      }
+      /* Optimize animations - removed global transform-style that breaks fixed positioning */
+    </style>
   </head>
   <body>
     <div id="root"></div>
