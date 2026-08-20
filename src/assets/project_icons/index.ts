@@ -1,9 +1,4 @@
-// Project icons module - add your project icon imports here
-// Example:
-// import MyProjectIcon from './MyProjectIcon.webp';
-//
-// export { MyProjectIcon };
-// export default { MyProjectIcon };
+import nestIcon from './nest.png';
 
-export {};
-export default {};
+export { nestIcon, nestIcon as nestLogo };
+export default { nestIcon };

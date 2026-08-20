@@ -5,14 +5,14 @@ import ProjectSection from '../../components/project/ProjectSection';
 import ProjectOverview from '../../components/project/ProjectOverview';
 import TechStack from '../../components/project/TechStack';
 import TechnicalHighlights from '../../components/project/TechnicalHighlights';
-import { comingSoon } from '../../assets';
+import { nestIcon } from '../../assets';
 import { socialLinks } from '../../config/socialLinks';
 
 const Nest = () => {
   return (
     <ProjectLayout>
       <ProjectHeader
-        icon={comingSoon}
+        icon={nestIcon}
         title="NEST"
         subtitle="ADHD productivity companion — Web + Android"
         githubUrl={socialLinks.repositories.nest}
