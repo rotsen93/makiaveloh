@@ -107,21 +107,29 @@ const Experience = () => {
 
         <div className="max-w-4xl mx-auto space-y-4">
           {experiences.map((exp, index) => (
-            <Card key={index} className="border-none transition-all duration-300 hover:shadow-lg bg-white/95 dark:bg-gray-800/95">
-              <CardHeader className="pb-2">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <CardTitle className="text-2xl" style={{ color: isDarkMode ? themeColors.colors.pink[300] : themeColors.colors.pink[400] }}>{exp.title}</CardTitle>
-                    <p className="text-lg font-semibold text-gray-700 dark:text-gray-400 mt-1">{exp.company}</p>
+            <Card
+              key={index}
+              className="border-none transition-all duration-300 hover:shadow-lg rounded-xl overflow-hidden"
+              style={{ backgroundColor: themeColors.card.background }}
+            >
+              <CardHeader className="pb-2 sm:pb-3">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 sm:gap-4">
+                  <div className="flex-1 min-w-0">
+                    <CardTitle className="text-xl sm:text-2xl font-bold tracking-tight" style={{ color: isDarkMode ? themeColors.colors.pink[300] : themeColors.colors.pink[500] }}>
+                      {exp.title}
+                    </CardTitle>
+                    <p className="text-base sm:text-lg font-semibold text-gray-700 dark:text-gray-300 mt-1">
+                      {exp.company}
+                    </p>
                   </div>
-                  <div className="text-right">
-                    <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400 mb-1">
-                      <Calendar className="h-4 w-4" />
-                      <span className="text-sm">{exp.period}</span>
+                  <div className="flex flex-wrap sm:flex-col items-start sm:items-end gap-x-4 gap-y-1.5 text-xs sm:text-sm text-gray-600 dark:text-gray-400 shrink-0 mt-1 sm:mt-0 pt-0.5">
+                    <div className="inline-flex items-center gap-1.5 whitespace-nowrap">
+                      <Calendar className="h-4 w-4 shrink-0" style={{ color: isDarkMode ? themeColors.colors.pink[400] : themeColors.colors.pink[500] }} />
+                      <span className="font-medium">{exp.period}</span>
                     </div>
-                    <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
-                      <MapPin className="h-4 w-4" />
-                      <span className="text-sm">{exp.location}</span>
+                    <div className="inline-flex items-center gap-1.5 whitespace-nowrap">
+                      <MapPin className="h-4 w-4 shrink-0" style={{ color: isDarkMode ? themeColors.colors.pink[400] : themeColors.colors.pink[500] }} />
+                      <span>{exp.location}</span>
                     </div>
                   </div>
                 </div>
