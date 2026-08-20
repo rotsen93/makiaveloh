@@ -10,7 +10,7 @@ export const socialLinks = {
     nest: import.meta.env.VITE_GITHUB_NEST_URL || 'https://github.com/rotsen93/nestapp',
     nestLive: import.meta.env.VITE_NEST_LIVE_URL || 'https://nestapp-71b49.web.app/',
     fiaocontrol: import.meta.env.VITE_GITHUB_FIAOCONTROL_URL || 'https://github.com/rotsen93',
-    musify: import.meta.env.VITE_GITHUB_MUSIFY_URL || 'https://github.com/rotsen93',
+    musify: import.meta.env.VITE_GITHUB_MUSIFY_URL || 'https://github.com/rotsen93/musifydistroApp',
     projectFour: import.meta.env.VITE_GITHUB_PROJECT4_URL || 'https://github.com/rotsen93',
   },
 

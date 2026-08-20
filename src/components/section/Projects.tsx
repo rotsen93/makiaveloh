@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui
 import { Badge } from '../ui/badge';
 import { ExternalLink, Code, ChevronLeft, ChevronRight, Globe } from 'lucide-react';
 import { socialLinks } from '../../config/socialLinks';
-import { comingSoon, nestIcon } from '../../assets';
+import { comingSoon, nestIcon, musifyIcon } from '../../assets';
 const Projects = () => {
   const { isDarkMode } = useDarkMode();
   const themeColors = useThemeColors();
@@ -38,9 +38,9 @@ const Projects = () => {
     },
     {
       title: "Musify Distro",
-      description: "Music distribution application — in development.",
-      technologies: [],
-      icon: comingSoon,
+      description: "Mobile music distribution & creator dashboard — music uploads, plan management, notifications, and analytics. iOS + Android.",
+      technologies: ["React Native", "Expo", "Expo Router", "TypeScript", "Reanimated"],
+      icon: musifyIcon,
       detailsUrl: "/projects/musify",
       githubUrl: socialLinks.repositories.musify,
       liveUrl: ''
